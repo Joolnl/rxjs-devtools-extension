@@ -1,0 +1,31 @@
+{
+    "name": "RxJS Extension",
+    "version": "1.0",
+    "minimum_chrome_version": "10.0",
+    "devtools_page": "html/devtools.html",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "/js/dom.js",
+                "/js/pane.js",
+                "/js/createdSubscriptions.js",
+                "/js/messageListener.js"
+            ]
+        }
+    ],
+    "background": {
+        "scripts": [
+            "/js/background.js"
+        ],
+        "persistent": false
+    },
+    "externally_connectable": {
+        "matches": [
+            "*://localhost/*"
+        ]
+    }
+}

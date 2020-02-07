@@ -1,0 +1,56 @@
+div.statistics-header {
+    padding: 1px;
+    margin: 1px 1px 20px 1px;
+    font-size: 1em;
+}
+
+div.statistics-header span {
+    margin: 0 3px;
+}
+
+span.statistic {
+    font-weight: bolder;
+}
+
+select.filter-select {
+    background-color: #f0f0f0;
+}
+
+button.order-button {
+    background-color: #f0f0f0;
+    border: 0;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+button.order-button:hover {
+    background-color: rgb(200, 236, 253);
+}
+
+.subscription {
+    padding: 1px;
+    margin: 1px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.subscription:hover {
+    background-color: rgb(200, 236, 253);
+}
+
+span.line {
+    font-weight: bold;
+}
+
+span.operator {
+    font-weight: bold;
+}
+
+.open {
+    color: red;
+}
+
+.timestamp {
+    float: right;
+    color: #404040;
+}
