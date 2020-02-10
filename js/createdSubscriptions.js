@@ -1,5 +1,7 @@
 // import { appendChildArray, createSpan, createSelect, createTextualDiv, createButton } from './dom.js';
 const subscriptionCreationContainer = document.getElementById('subscriptionCreationContainer');
+const subscriptions = [];
+let [subAmount, closed, events] = [0, 0, 0];
 
 const createSubscriptionCreationMessage = (operator, line, file, timestamp) => {
     return `
@@ -44,13 +46,6 @@ const displayCreationSubscriptions = (container, subscriptions) => {
         .map(subscription => container.appendChild(subscription));
 };
 
-const subscriptions = [
-    { 'operator': 'fromEvent', 'line': 10, 'file': 'appComponent.ts', 'timestamp': '10:15:17' },
-    { 'operator': 'interval', 'line': 12, 'file': 'appComponent.ts', 'timestamp': '10:15:18' },
-    { 'operator': 'fromEvent', 'line': 37, 'file': 'appComponent.ts', 'timestamp': '10:15:19' },
-    { 'operator': 'fromEvent', 'line': 107, 'file': 'appComponent.ts', 'timestamp': '10:17:30' }
-];
-
 const drawSubscriptionCreationContainer = (container) => {
     if (container === null) {
         return;
@@ -62,9 +57,7 @@ const drawSubscriptionCreationContainer = (container) => {
 
 drawSubscriptionCreationContainer(subscriptionCreationContainer);
 
-const addSubscription = msg => {
-    const newSubs = [
-        {'operator': 'test', 'line': 0, 'file': 'null', 'timestamp': '00:00:00'}
-    ];
-    displayCreationSubscriptions(subscriptionCreationContainer, newSubs);
+const addSubscription = sub => {
+    subscriptions.push({'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': '00:00:00'});
+    drawSubscriptionCreationContainer(subscriptionCreationContainer);
 };
