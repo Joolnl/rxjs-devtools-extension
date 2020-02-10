@@ -5,21 +5,11 @@ const rxjsPanel = panels.create(
     "html/pane.html"
 );
 
-// DevTools page -- devtools.js
-// Create a connection to the background page
 var backgroundPageConnection = chrome.runtime.connect({
-    name: "devtools.js"
+    name: "test"
 });
 
-backgroundPageConnection.onMessage.addListener(function (message) {
-    console.log(message);
-    alert('asd');
-});
 
-// Relay the tab ID to the background page
-chrome.runtime.sendMessage({
-    tabId: chrome.devtools.inspectedWindow.tabId,
-    scriptToInject: "messageListener.js"
-});
+backgroundPageConnection.postMessage('message from devtools.js');
 
-// backgroundPageConnection.sendMessage('test');
+backgroundPageConnection.onMessage.addListener(msg => alert(msg));
