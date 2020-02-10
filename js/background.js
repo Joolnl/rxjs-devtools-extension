@@ -1,9 +1,10 @@
-chrome.runtime.onConnect.addListener(function(port) {
+chrome.runtime.onConnect.addListener(port => {
+  // port.onMessage.addListener(msg => {
+  //   port.postMessage('test');
+  // });
   console.log(port.name);
-  port.onMessage.addListener(msg => {
-    console.log(msg);
-    port.postMessage('test');
+  port.postMessage({
+    subscriptionType: 'fromEvent'
   });
-  port.postMessage('message from background.js');
   
 });

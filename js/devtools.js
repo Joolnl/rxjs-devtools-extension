@@ -4,12 +4,3 @@ const rxjsPanel = panels.create(
     null,
     "html/pane.html"
 );
-
-var backgroundPageConnection = chrome.runtime.connect({
-    name: "test"
-});
-
-
-backgroundPageConnection.postMessage('message from devtools.js');
-
-backgroundPageConnection.onMessage.addListener(msg => alert(msg));

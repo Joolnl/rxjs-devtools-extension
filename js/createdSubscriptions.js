@@ -61,3 +61,10 @@ const drawSubscriptionCreationContainer = (container) => {
 };
 
 drawSubscriptionCreationContainer(subscriptionCreationContainer);
+
+const addSubscription = msg => {
+    const newSubs = [
+        {'operator': 'test', 'line': 0, 'file': 'null', 'timestamp': '00:00:00'}
+    ];
+    displayCreationSubscriptions(subscriptionCreationContainer, newSubs);
+};
