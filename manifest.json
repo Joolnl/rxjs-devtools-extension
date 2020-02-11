@@ -5,7 +5,7 @@
     "devtools_page": "html/devtools.html",
     "manifest_version": 2,
     "permissions": [
-        "webNavigation"
+        "webNavigation", "tabs"
     ],
     "content_scripts": [
         {

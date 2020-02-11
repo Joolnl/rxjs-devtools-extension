@@ -61,3 +61,8 @@ const addSubscription = sub => {
     subscriptions.push({'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': '00:00:00'});
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
 };
+
+const clearPane = () => {
+    subscriptions.length = 0;
+    [subAmount, closed, events] = [0, 0, 0];
+};
