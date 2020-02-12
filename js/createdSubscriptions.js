@@ -55,9 +55,14 @@ const drawSubscriptionCreationContainer = (container) => {
     displayCreationSubscriptions(container, subscriptions);
 };
 
+const timeStamp = () => {
+    const date = new Date();
+    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
+};
+
 const addSubscription = sub => {
     subAmount++;
-    subscriptions.push({'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': '00:00:00'});
+    subscriptions.push({ 'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': timeStamp() });
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
 };
 
