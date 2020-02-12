@@ -51,13 +51,12 @@ const drawSubscriptionCreationContainer = (container) => {
         return;
     }
     container.innerHTML = '';
-    container.appendChild(createSubscriptionDataDiv(4, 0, 0));
+    container.appendChild(createSubscriptionDataDiv(subAmount, closed, events));
     displayCreationSubscriptions(container, subscriptions);
 };
 
-drawSubscriptionCreationContainer(subscriptionCreationContainer);
-
 const addSubscription = sub => {
+    subAmount++;
     subscriptions.push({'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': '00:00:00'});
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
 };
