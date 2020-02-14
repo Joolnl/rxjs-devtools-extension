@@ -39,7 +39,8 @@ const displayCreationSubscriptions = (container, subscriptions) => {
         .map(subscription => {
             return createSubscriptionDiv(
                 createSubscriptionCreationMessage(subscription.operator, subscription.line, subscription.file, subscription.timestamp),
-                `eventTab${subscription.id}`
+                `eventTab${subscription.id}`,
+                subscription.events
             );
         })
         .map(subscription => container.appendChild(subscription));
@@ -66,6 +67,7 @@ const addSubscription = sub => {
     );
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
     subAmount++;
+    // chrome.extension.getBackgroundPage().console.log(subscriptions);
 };
 
 const clearPane = () => {
@@ -73,21 +75,17 @@ const clearPane = () => {
     [subAmount, closed, events] = [0, 0, 0];
 };
 
+// Add event to subscriptions data for redraw, and append single event.
 const addEvent = (id, event) => {
     events++;
     subscriptions
-        .filter(sub => sub === id)
+        .filter(sub => sub.id === id)
         .map(sub => sub.events.push(event));
 
     const subId = `eventTab${id}`;
 
     if (document.getElementById(subId)) {
-        const div = document.createElement('div');
-        div.innerText = 'mouseclick > 1 > 1 > 2';
-        const div2 = document.createElement('test');
-        div2.innerText = 'mouseclick > 1 > 1 > ';
+        const div = createElement('div', event);
         document.getElementById(subId).appendChild(div);
-        document.getElementById(subId).appendChild(div2);
-
     }
 };

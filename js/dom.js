@@ -60,7 +60,7 @@ const createElement = (type, content = null, cssClass = null, clickEvent = null)
     return element;
 };
 
-const createSubscriptionDiv = (textContent, id) => {
+const createSubscriptionDiv = (textContent, id, events) => {
     const outer = createElement("div", null, 'subscription');
     const header = createElement("div", textContent, 'subscription-header', () => () => {
         outer.classList.contains('open')
@@ -69,6 +69,8 @@ const createSubscriptionDiv = (textContent, id) => {
     });
     const eventDiv = createElement("div", null, 'eventDiv');
     eventDiv.id = id;
+
+    events.map(event => eventDiv.appendChild(createElement('div', event)));
 
     appendChildArray(outer, [header, eventDiv]);
     return outer;
