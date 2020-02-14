@@ -29,6 +29,7 @@ const createButton = (textContent, cssClass) => {
     return button;
 };
 
+// TODO: there should be a single function for creating elements alike.
 // clickEvent fn must have curryable parameter to bind element.
 const createTextualDiv = (textContent, cssClass = null, clickEvent = null) => {
     const div = document.createElement("div");
@@ -39,4 +40,35 @@ const createTextualDiv = (textContent, cssClass = null, clickEvent = null) => {
         div.addEventListener("click", boundClickEvent);
     }
     return div;
+};
+
+// clickEvent fn must have curryable parameter to bind element.
+const createElement = (type, content = null, cssClass = null, clickEvent = null) => {
+    const element = document.createElement(type);
+    if (content) {
+        element.innerHTML = content;
+    }
+
+    if (cssClass) {
+        element.classList.add(cssClass)
+    }
+
+    if (clickEvent) {
+        element.addEventListener("click", clickEvent(element));
+    }
+
+    return element;
+};
+
+const createSubscriptionDiv = (textContent) => {
+    const outer = createElement("div", null, 'subscription');
+    const header = createElement("div", textContent, 'subscription-header', element => () => {
+        outer.classList.contains('open')
+            ? outer.classList.remove('open')
+            : outer.classList.add('open');
+    });
+    const eventDiv = createElement("div", 'events', 'eventDiv');
+
+    appendChildArray(outer, [header, eventDiv]);
+    return outer;
 };

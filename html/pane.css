@@ -27,15 +27,26 @@ button.order-button:hover {
     background-color: rgb(200, 236, 253);
 }
 
-.subscription {
+.subscription-header {
     padding: 1px;
     margin: 1px;
     background-color: #f0f0f0;
     cursor: pointer;
 }
 
-.subscription:hover {
+.subscription-header:hover {
     background-color: rgb(200, 236, 253);
+}
+
+div.subscription.open div.eventDiv {
+    display: block;
+}
+
+
+
+div.eventDiv {
+    background-color: yellow;
+    display: none;
 }
 
 span.line {
@@ -46,9 +57,6 @@ span.operator {
     font-weight: bold;
 }
 
-.open {
-    color: red;
-}
 
 .timestamp {
     float: right;

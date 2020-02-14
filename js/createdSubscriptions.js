@@ -37,7 +37,7 @@ const toggleOpen = (element) => () => {
 const displayCreationSubscriptions = (container, subscriptions) => {
     subscriptions
         .map(subscription => {
-            return createTextualDiv(
+            return createSubscriptionDiv(
                 createSubscriptionCreationMessage(subscription.operator, subscription.line, subscription.file, subscription.timestamp),
                 'subscription',
                 toggleOpen
