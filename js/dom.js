@@ -60,14 +60,15 @@ const createElement = (type, content = null, cssClass = null, clickEvent = null)
     return element;
 };
 
-const createSubscriptionDiv = (textContent) => {
+const createSubscriptionDiv = (textContent, id) => {
     const outer = createElement("div", null, 'subscription');
-    const header = createElement("div", textContent, 'subscription-header', element => () => {
+    const header = createElement("div", textContent, 'subscription-header', () => () => {
         outer.classList.contains('open')
             ? outer.classList.remove('open')
             : outer.classList.add('open');
     });
-    const eventDiv = createElement("div", 'events', 'eventDiv');
+    const eventDiv = createElement("div", null, 'eventDiv');
+    eventDiv.id = id;
 
     appendChildArray(outer, [header, eventDiv]);
     return outer;

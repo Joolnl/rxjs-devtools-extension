@@ -32,6 +32,13 @@ chrome.runtime.onConnect.addListener(port => {
       bufferMessagesFlag
         ? bufferedMessages.push(msg)
         : port.postMessage(msg);
+
+      const msg2 = createMessage('create_event', 1);
+      if (!bufferMessagesFlag) {
+        port.postMessage(msg2);
+      } else {
+        bufferedMessages.push(msg2);
+      }
     }
   });
 });

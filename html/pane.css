@@ -42,10 +42,7 @@ div.subscription.open div.eventDiv {
     display: block;
 }
 
-
-
 div.eventDiv {
-    background-color: yellow;
     display: none;
 }
 

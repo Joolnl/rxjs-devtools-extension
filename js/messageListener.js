@@ -8,10 +8,11 @@ backgroundPageConnection.onMessage.addListener(event => {
         case 'create_subscription':
             addSubscription(message);
             break;
+        case 'create_event':
+            addEvent(0, 'testEvent');
+            break;
         case 'clear':
             clearPane();
             break;
     }
-    // chrome.extension.getBackgroundPage().console.log(`${type} ${message}`);
-    // addSubscription(msg);
 });

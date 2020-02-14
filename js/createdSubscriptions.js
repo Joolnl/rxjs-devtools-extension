@@ -39,8 +39,7 @@ const displayCreationSubscriptions = (container, subscriptions) => {
         .map(subscription => {
             return createSubscriptionDiv(
                 createSubscriptionCreationMessage(subscription.operator, subscription.line, subscription.file, subscription.timestamp),
-                'subscription',
-                toggleOpen
+                `eventTab${subscription.id}`
             );
         })
         .map(subscription => container.appendChild(subscription));
@@ -61,12 +60,34 @@ const timeStamp = () => {
 };
 
 const addSubscription = sub => {
-    subAmount++;
-    subscriptions.push({ 'operator': sub.operator, 'line': sub.line, 'file': sub.file, 'timestamp': timeStamp() });
+    subscriptions.push(
+        { id: subAmount, operator: sub.operator, line: sub.line, file: sub.file,
+             timestamp: timeStamp(), events: [] }
+    );
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
+    subAmount++;
 };
 
 const clearPane = () => {
     subscriptions.length = 0;
     [subAmount, closed, events] = [0, 0, 0];
+};
+
+const addEvent = (id, event) => {
+    events++;
+    subscriptions
+        .filter(sub => sub === id)
+        .map(sub => sub.events.push(event));
+
+    const subId = `eventTab${id}`;
+
+    if (document.getElementById(subId)) {
+        const div = document.createElement('div');
+        div.innerText = 'mouseclick > 1 > 1 > 2';
+        const div2 = document.createElement('test');
+        div2.innerText = 'mouseclick > 1 > 1 > ';
+        document.getElementById(subId).appendChild(div);
+        document.getElementById(subId).appendChild(div2);
+
+    }
 };
