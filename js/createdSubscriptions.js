@@ -70,13 +70,14 @@ const addSubscription = sub => {
     // chrome.extension.getBackgroundPage().console.log(subscriptions);
 };
 
+// Reset pane and statistics.
 const clearPane = () => {
     subscriptions.length = 0;
     [subAmount, closed, events] = [0, 0, 0];
 };
 
 // Add event to subscriptions data for redraw, and append single event.
-const addEvent = (id, event) => {
+const addEvent = (id, message, event) => {
     events++;
     subscriptions
         .filter(sub => sub.id === id)

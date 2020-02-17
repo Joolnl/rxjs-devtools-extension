@@ -2,14 +2,14 @@ const backgroundPageConnection = chrome.runtime.connect({
     name: "messageListener"
 });
 
-backgroundPageConnection.onMessage.addListener(event => {
-    const {type, message} = event;
+backgroundPageConnection.onMessage.addListener(msg => {
+    const { type, message, event } = msg;
     switch (type) {
-        case 'create_subscription':
+        case 'SubscriptionCreation':
             addSubscription(message);
             break;
-        case 'create_event':
-            addEvent(0, 'testEvent');
+        case 'EventPassage':
+            addEvent(0, message, event);
             break;
         case 'clear':
             clearPane();

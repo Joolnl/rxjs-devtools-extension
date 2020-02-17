@@ -1,8 +1,8 @@
 const bufferedMessages = [];
 let bufferMessagesFlag = false;
 
-const createMessage = (type, message) => {
-  return { type, message };
+const createMessage = (type, message, event = null) => {
+  return { type, message, event };
 };
 
 // TODO: filter external resources.
@@ -28,17 +28,17 @@ chrome.runtime.onConnect.addListener(port => {
   // Listen for external messages. (from script)
   chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
     if (port) {
-      const msg = createMessage('create_subscription', request.detail);
+      const msg = createMessage(request.detail.messageType, request.detail.metadata, request.detail.event);
       bufferMessagesFlag
         ? bufferedMessages.push(msg)
         : port.postMessage(msg);
 
-      const msg2 = createMessage('create_event', 1);
-      if (!bufferMessagesFlag) {
-        port.postMessage(msg2);
-      } else {
-        bufferedMessages.push(msg2);
-      }
+      // const msg2 = createMessage('create_event', 1);
+      // if (!bufferMessagesFlag) {
+      //   port.postMessage(msg2);
+      // } else {
+      //   bufferedMessages.push(msg2);
+      // }
     }
   });
 });
