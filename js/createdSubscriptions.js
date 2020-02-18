@@ -62,12 +62,12 @@ const timeStamp = () => {
 
 const addSubscription = sub => {
     subscriptions.push(
-        { id: subAmount, operator: sub.operator, line: sub.line, file: sub.file,
+        { id: sub.uuid, operator: sub.operator, line: sub.line, file: sub.file,
              timestamp: timeStamp(), events: [] }
     );
     drawSubscriptionCreationContainer(subscriptionCreationContainer);
     subAmount++;
-    // chrome.extension.getBackgroundPage().console.log(subscriptions);
+    // chrome.extension.getBackgroundPage().console.log(sub.uuid);
 };
 
 // Reset pane and statistics.
@@ -76,6 +76,9 @@ const clearPane = () => {
     [subAmount, closed, events] = [0, 0, 0];
 };
 
+// TODO: for begin event create a new container
+// TODO: for neither begin nor end event add event to last container
+// TODO: for end event close container? Might be useless when just creating new container.
 // Add event to subscriptions data for redraw, and append single event.
 const addEvent = (id, message, event) => {
     events++;
