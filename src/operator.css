@@ -1,0 +1,12 @@
+div.Operator {
+    width: 99%;
+    border: 2px solid black;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div.Operator span {
+    font-weight: bold;
+}

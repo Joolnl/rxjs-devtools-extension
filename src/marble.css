@@ -1,0 +1,43 @@
+div.Marble {
+    background-color: lightcoral;
+    /* width: 2.25vw; */
+    /* height: 2.25vw; */
+    /* border-radius: 1.125vw 1.125vw; */
+    width: 30px;
+    height: 30px;
+    border-radius: 15px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1px;
+}
+
+div.Marble.empty {
+    visibility: hidden;
+}
+
+div.Marble span {
+    padding: px;
+    font-weight: bold;
+}
+
+
+div.Marble.color1 {
+    background-color: #FC440F;
+}
+
+div.Marble.color2 {
+    background-color: #6699CC;
+}
+
+div.Marble.color3 {
+    background-color: #2EC4B6;
+}
+
+div.Marble.color4 {
+    background-color: #E71D36;
+}
+
+div.Marble.color5 {
+    background-color: #FF9F1C;
+}
