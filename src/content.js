@@ -1,14 +1,13 @@
 import { Subject } from 'rxjs';
-import { filter, pluck, shareReplay } from 'rxjs/operators';
-import { getObservableMock } from './mockMessages';
+import { filter, pluck } from 'rxjs/operators';
+import { getObservableMock, getOperatorMock, getEventMock } from './mockMessages';
 
 const backpageMessageSubject$ = new Subject();
 
 const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
         filter(message => message.type === messageType),
-        pluck('message'),
-        shareReplay(100)
+        pluck('message')
     );
 };
 
@@ -20,7 +19,7 @@ export const reset$ = backpageMessageSubject$.pipe(
     filter(message => message.type === 'reset'),
 );
 
-const development = true;
+const development = false;
 
 if (!development) {
     declare var chrome;
@@ -35,14 +34,23 @@ if (!development) {
         // print(`message coming in content script ${msg}`);
         backpageMessageSubject$.next(msg);
     });
+
 } else {    // Development Block.
     setTimeout(() => {
         for (let i = 0; i < 10; i++) {
-            backpageMessageSubject$.next(getObservableMock());
+            const observable = getObservableMock();
+            backpageMessageSubject$.next(observable);
+            setTimeout(() => {
+                [1, 2, 3].map(() => backpageMessageSubject$.next(getOperatorMock(observable.message.uuid)));
+                [1, 2, 3, 4].map(() => {
+                    getEventMock(observable.message.uuid, 4).map(event => backpageMessageSubject$.next(event));
+                });
+            }, 100);
         }
-    }, 0);
+    }, 100);
 
     setTimeout(() => {
         backpageMessageSubject$.next({type: 'reset'})
     }, 5000);
+
 }

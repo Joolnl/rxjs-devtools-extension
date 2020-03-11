@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import './devtoolsPane.css';
 import Subscription from './subscription';
 import { observable$, reset$ } from './content';
@@ -9,7 +9,7 @@ export default function DevtoolsPane() {
     const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
     const [subscriptions, setSubscriptions] = useState([]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const subscription = observable$.subscribe(sub => {
             setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
         });

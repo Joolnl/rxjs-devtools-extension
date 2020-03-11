@@ -1,6 +1,6 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer, useLayoutEffect } from 'react';
 import './devtoolsPane.css';
-import { operator$, event$, print } from './content';
+import { operator$, event$ } from './content';
 import * as uuid from 'uuid/v4';
 import Operator from './operator';
 import MarbleLane from './marbleLane';
@@ -59,7 +59,7 @@ export default function DevtoolsPane(props) {
     const [state, dispatch] = useReducer(reducer, initialState);
     const zip = (a1, m2) => a1.map((x, i) => [x, m2.getNthEvent(i)]);  // Zips array with EventMap, array dominance.
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const operatorSubscription = operator$.pipe(
             filter(operator => operator.observable === props.observable)
         ).subscribe(operator => {
@@ -73,6 +73,7 @@ export default function DevtoolsPane(props) {
         });
 
         return () => {
+            console.log('unmounting!')
             operatorSubscription.unsubscribe();
             eventSubscription.unsubscribe();
         };
