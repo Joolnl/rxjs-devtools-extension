@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { filter, pluck, shareReplay, tap } from 'rxjs/operators';
+import { filter, pluck, shareReplay } from 'rxjs/operators';
 import { getObservableMock } from './mockMessages';
 
 const backpageMessageSubject$ = new Subject();
@@ -8,7 +8,6 @@ const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
         filter(message => message.type === messageType),
         pluck('message'),
-        tap(message => console.log(message)),
         shareReplay(100)
     );
 };
@@ -19,7 +18,6 @@ export const operator$ = createMessageObservable(backpageMessageSubject$, 'opera
 export const event$ = createMessageObservable(backpageMessageSubject$, 'event');
 export const reset$ = backpageMessageSubject$.pipe(
     filter(message => message.type === 'reset'),
-    pluck('message')
 );
 
 const development = true;
@@ -38,32 +36,13 @@ if (!development) {
         backpageMessageSubject$.next(msg);
     });
 } else {    // Development Block.
-    for (let i = 0; i < 10; i++) {
-        backpageMessageSubject$.next(getObservableMock());
-    }
-    setTimeout(() => backpageMessageSubject$.next(getObservableMock()), 1000);
-    setTimeout(() => backpageMessageSubject$.next(getObservableMock()), 1000);
+    setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+            backpageMessageSubject$.next(getObservableMock());
+        }
+    }, 0);
 
+    setTimeout(() => {
+        backpageMessageSubject$.next({type: 'reset'})
+    }, 5000);
 }
-// For compilation.
-
-
-
-
-
-// setTimeout(() => {
-//     backpageMessageSubject$.next({ ...observableMessage });
-//     backpageMessageSubject$.next({ ...observableMessage });
-//     setTimeout(() => {
-//         backpageMessageSubject$.next({ ...operatorMessage });
-//         backpageMessageSubject$.next({ ...operatorMessage });
-//         backpageMessageSubject$.next({ ...operatorMessage });
-//         backpageMessageSubject$.next({ ...eventMessage });
-//         backpageMessageSubject$.next({ ...eventMessage });
-//         backpageMessageSubject$.next({ ...eventMessage });
-//         backpageMessageSubject$.next({ ...eventMessage2 });
-//         backpageMessageSubject$.next({ ...eventMessage2 });
-//         backpageMessageSubject$.next({ ...eventMessage2 });
-//         backpageMessageSubject$.next({ ...eventMessage2 });
-//     }, 1000);
-// }, 1000);

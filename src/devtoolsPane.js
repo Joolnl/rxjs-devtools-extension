@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './devtoolsPane.css';
 import Subscription from './subscription';
-import { observable$ } from './content';
+import { observable$, reset$ } from './content';
 import * as uuid from 'uuid/v4';
+import { take } from 'rxjs/operators';
 
 export default function DevtoolsPane() {
     const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
@@ -13,7 +14,11 @@ export default function DevtoolsPane() {
             setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
         });
 
-        // const resetSubscription;
+        reset$.pipe(
+            take(1)
+        ).subscribe(() => {
+            setSubscriptions([]);
+        });
 
         return () => subscription.unsubscribe();
     }, []);

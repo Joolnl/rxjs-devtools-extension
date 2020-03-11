@@ -83,7 +83,7 @@ export default function DevtoolsPane(props) {
             {
                 zip(state.operators, state.events).map(set => {
                     const [operator, events] = set;
-                    print(events);
+                    // print(events);
                     return <div key={uuid()}>
                         {operator && <Operator key={uuid()} fn={operator}></Operator>}
                         <MarbleLane key={uuid()} marbles={events}></MarbleLane>
