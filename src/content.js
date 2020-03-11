@@ -1,90 +1,55 @@
 import { Subject } from 'rxjs';
-import { filter, map, shareReplay, tap } from 'rxjs/operators';
+import { filter, pluck, shareReplay, tap } from 'rxjs/operators';
+import { getObservableMock } from './mockMessages';
 
 const backpageMessageSubject$ = new Subject();
 
 const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
         filter(message => message.type === messageType),
-        map(message => message.message),
-        tap(message => print(message)),
+        pluck('message'),
+        tap(message => console.log(message)),
         shareReplay(100)
     );
 };
 
+export let print = msg => console.log(msg); // For development purpose.
 export const observable$ = createMessageObservable(backpageMessageSubject$, 'observable');
 export const operator$ = createMessageObservable(backpageMessageSubject$, 'operator');
 export const event$ = createMessageObservable(backpageMessageSubject$, 'event');
+export const reset$ = backpageMessageSubject$.pipe(
+    filter(message => message.type === 'reset'),
+    pluck('message')
+);
 
+const development = true;
+
+if (!development) {
+    declare var chrome;
+
+    print = msg => chrome.extension.getBackgroundPage().console.log(msg);
+
+    const backgroundPageConnection = chrome.runtime.connect({
+        name: 'messageListener'
+    });
+
+    backgroundPageConnection.onMessage.addListener(msg => {
+        // print(`message coming in content script ${msg}`);
+        backpageMessageSubject$.next(msg);
+    });
+} else {    // Development Block.
+    for (let i = 0; i < 10; i++) {
+        backpageMessageSubject$.next(getObservableMock());
+    }
+    setTimeout(() => backpageMessageSubject$.next(getObservableMock()), 1000);
+    setTimeout(() => backpageMessageSubject$.next(getObservableMock()), 1000);
+
+}
 // For compilation.
-declare var chrome;
-
-export const print = msg => chrome.extension.getBackgroundPage().console.log(msg);
-
-const backgroundPageConnection = chrome.runtime.connect({
-    name: 'messageListener'
-});
-
-backgroundPageConnection.onMessage.addListener(msg => {
-    // print(`message coming in content script ${msg}`);
-    backpageMessageSubject$.next(msg);
-});
 
 
-// const observableMessage = {
-//     type: 'observable',
-//     message: {
-//         uuid: '1',
-//         type: 'fromEvent',
-//         identifier: 'testObservable',
-//         'file': '/app/app_component.ts',
-//         'line': 15
-//     }
-// };
 
-// const observableMessage2 = {
-//     type: 'observable',
-//     message: {
-//         uuid: '7',
-//         type: 'fromEvent',
-//         identifier: 'testObservable',
-//         'file': '/app/app_component.ts',
-//         'line': 15
-//     }
-// };
 
-// const operatorMessage = {
-//     type: 'operator',
-//     message: {
-//         type: 'map',
-//         function: 'x => x += 1',
-//         observable: '1',
-//         file: '/app/app_component.ts',
-//         line: 30
-//     }
-// };
-
-// const eventMessage = {
-//     type: 'event',
-//     message: {
-//         data: '1',
-//         observable: '1',
-//         uuid: '1',
-//         file: '/app/app_component.ts',
-//         line: 12
-//     }
-// };
-
-// const eventMessage2 = {
-//     type: 'event',
-//     message: {
-//         data: 'b',
-//         observable: '1',
-//         uuid: '2',
-//         file: '/app/app_component.ts',
-//         line: 12
-//     }
-// };
 
 // setTimeout(() => {
 //     backpageMessageSubject$.next({ ...observableMessage });

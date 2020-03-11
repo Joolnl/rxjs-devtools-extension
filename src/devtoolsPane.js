@@ -13,6 +13,8 @@ export default function DevtoolsPane() {
             setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
         });
 
+        // const resetSubscription;
+
         return () => subscription.unsubscribe();
     }, []);
 

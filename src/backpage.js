@@ -49,6 +49,14 @@ declare var chrome;
 
 // TODO: filter external resources.
 chrome.runtime.onConnect.addListener(port => {
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+        if (port) {
+            if (changeInfo.status === 'loading') {
+                port.postMessage({ type: 'reset' });
+            }
+        }
+    });
+
     chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
         if (port) {
             const msg = request.detail;
