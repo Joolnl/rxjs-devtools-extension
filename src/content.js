@@ -1,11 +1,12 @@
 import { Subject } from 'rxjs';
-import { filter, pluck } from 'rxjs/operators';
+import { filter, pluck, tap } from 'rxjs/operators';
 import { getObservableMock, getOperatorMock, getEventMock } from './mockMessages';
 
 const backpageMessageSubject$ = new Subject();
 
 const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
+        // tap(message => print(message.type)),
         filter(message => message.type === messageType),
         pluck('message')
     );
@@ -20,6 +21,8 @@ export const reset$ = backpageMessageSubject$.pipe(
 );
 
 const development = false;
+print = msg => chrome.extension.getBackgroundPage().console.log(msg);
+
 
 if (!development) {
     declare var chrome;
@@ -30,9 +33,10 @@ if (!development) {
         name: 'messageListener'
     });
 
+
     backgroundPageConnection.onMessage.addListener(msg => {
-        // print(`message coming in content script ${msg}`);
         backpageMessageSubject$.next(msg);
+        print(msg);
     });
 
 } else {    // Development Block.

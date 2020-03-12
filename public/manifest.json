@@ -27,7 +27,7 @@
     "scripts": [
       "/static/js/xbackpage.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "externally_connectable": {
     "matches": [

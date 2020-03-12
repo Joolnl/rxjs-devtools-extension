@@ -14,9 +14,7 @@ export default function DevtoolsPane() {
             setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
         });
 
-        reset$.pipe(
-            take(1)
-        ).subscribe(() => {
+        reset$.subscribe(() => {
             setSubscriptions([]);
         });
 
