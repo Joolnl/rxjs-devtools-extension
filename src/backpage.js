@@ -33,15 +33,4 @@ chrome.runtime.onConnect.addListener(port => {
     });
 
     chrome.runtime.onMessageExternal.addListener(curried);
-
-    // chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
-    //     if (port) {
-    //         if (reloaded === 4) {
-    //             port.postMessage({ type: 'reset' });
-    //             reloaded = 0;
-    //         }
-    //         const msg = request.detail;
-    //         port.postMessage(msg);
-    //     }
-    // });
 });

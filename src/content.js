@@ -1,12 +1,11 @@
 import { Subject } from 'rxjs';
-import { filter, pluck, tap } from 'rxjs/operators';
+import { filter, pluck, shareReplay } from 'rxjs/operators';
 import { getObservableMock, getOperatorMock, getEventMock } from './mockMessages';
 
 const backpageMessageSubject$ = new Subject();
 
 const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
-        // tap(message => print(message.type)),
         filter(message => message.type === messageType),
         pluck('message')
     );
@@ -14,16 +13,13 @@ const createMessageObservable = (source$, messageType) => {
 
 export let print = msg => console.log(msg); // For development purpose.
 export const observable$ = createMessageObservable(backpageMessageSubject$, 'observable');
-export const operator$ = createMessageObservable(backpageMessageSubject$, 'operator');
+export const operator$ = createMessageObservable(backpageMessageSubject$, 'operator').pipe(shareReplay(10));
 export const event$ = createMessageObservable(backpageMessageSubject$, 'event');
 export const reset$ = backpageMessageSubject$.pipe(
     filter(message => message.type === 'reset'),
 );
 
 const development = false;
-print = msg => chrome.extension.getBackgroundPage().console.log(msg);
-
-
 if (!development) {
     declare var chrome;
 
@@ -36,7 +32,10 @@ if (!development) {
 
     backgroundPageConnection.onMessage.addListener(msg => {
         backpageMessageSubject$.next(msg);
-        print(msg);
+        if (msg.type === 'operator') {
+            const { type, line, observable } = msg.message;
+            print(`type: ${type} on ${line} with observable ${observable} `);
+        }
     });
 
 } else {    // Development Block.
@@ -54,7 +53,7 @@ if (!development) {
     }, 100);
 
     setTimeout(() => {
-        backpageMessageSubject$.next({type: 'reset'})
+        backpageMessageSubject$.next({ type: 'reset' })
     }, 5000);
 
 }
