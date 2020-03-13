@@ -1,8 +1,12 @@
-import { Subject } from 'rxjs';
-import { filter, pluck, shareReplay } from 'rxjs/operators';
+import { Subject, interval, zip } from 'rxjs';
+import { filter, pluck, map } from 'rxjs/operators';
 import { getObservableMock, getOperatorMock, getEventMock } from './mockMessages';
 
+const timer$ = interval(10);
 const backpageMessageSubject$ = new Subject();
+const backpageMessageSubjectEmiter$ = zip(backpageMessageSubject$, timer$).pipe(
+    map(([value, _]) => value)
+);
 
 const createMessageObservable = (source$, messageType) => {
     return source$.pipe(
@@ -12,9 +16,9 @@ const createMessageObservable = (source$, messageType) => {
 };
 
 export let print = msg => console.log(msg); // For development purpose.
-export const observable$ = createMessageObservable(backpageMessageSubject$, 'observable');
-export const operator$ = createMessageObservable(backpageMessageSubject$, 'operator').pipe(shareReplay(10));
-export const event$ = createMessageObservable(backpageMessageSubject$, 'event');
+export const observable$ = createMessageObservable(backpageMessageSubjectEmiter$, 'observable');
+export const operator$ = createMessageObservable(backpageMessageSubjectEmiter$, 'operator');
+export const event$ = createMessageObservable(backpageMessageSubjectEmiter$, 'event');
 export const reset$ = backpageMessageSubject$.pipe(
     filter(message => message.type === 'reset'),
 );
