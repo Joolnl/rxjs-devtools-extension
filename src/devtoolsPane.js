@@ -6,33 +6,29 @@ import * as uuid from 'uuid/v4';
 import { map } from 'rxjs/operators';
 
 export default function DevtoolsPane() {
-    const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
+    const createSubscription = (uuid, observable, type, child$) => ({ uuid, observable, type, child$ });
     const [subscriptions, setSubscriptions] = useState([]);
 
-    useLayoutEffect(async () => {
-        const subscription = await getSubscription$();
-        
-        subscription.subscribe(message => {
-            const { metadata, observable } = message;
-            setSubscriptions(subscriptions => [createSubscription(metadata.uuid, metadata.identifier, metadata.type), ...subscriptions]);
-        });
+    useLayoutEffect(() => {
+        const fetchSubscription = async () => {
+            const subscription = await getSubscription$();
+            
+            subscription.subscribe(message => {
+                const { metadata, child$ } = message;
+                setSubscriptions(subscriptions => [createSubscription(metadata.uuid, metadata.identifier, metadata.type, child$), ...subscriptions]);
+            });
 
-        // const subscription = subscription$.subscribe(sub => {
-        //     setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
-        // });
+            return () => subscription.unsubscribe();
+        }
 
-        // reset$.subscribe(() => {
-        //     setSubscriptions([]);
-        // });
-
-        return () => subscription.unsubscribe();
+        fetchSubscription();
     }, []);
 
     return (
         <div className='DevtoolsPane'>
             {subscriptions
                 .map(sub => {
-                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type}></Subscription>
+                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type} child$={sub.child$}></Subscription>
                 })}
         </div>
     );

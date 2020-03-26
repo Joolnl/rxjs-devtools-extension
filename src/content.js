@@ -17,15 +17,11 @@ const dispatchMessage = (message, subscriber) => {
         case 'observable':  // Create observable from producer, register producer, pass along observable.
             const subject = new Subject();
             subjects.set(message.message.uuid, subject);
-            // subscriber.next([message, subject]);
-            subscriber.next({ metadata: message, observable: subject });
+            subscriber.next({ metadata: message, child$: subject });
             break;
         case 'event':
-            // console.log(`uuid ${message.message.observable} producers has ${subjects.has(message.message.observable)} size ${subjects.size}`);
             console.log(`subjects size: ${subjects.size}`)
             subjects.get(message.message.observable).next('hello world');
-            // producers.get(message.message.uuid)('test');
-            // pass subscription along in appropriate observable.
             break;
         default:
             throw new Error('Invalid message type given!');
