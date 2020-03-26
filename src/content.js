@@ -17,7 +17,8 @@ const dispatchMessage = (message, subscriber) => {
         case 'observable':  // Create observable from producer, register producer, pass along observable.
             const subject = new Subject();
             subjects.set(message.message.uuid, subject);
-            subscriber.next([message, subject]);
+            // subscriber.next([message, subject]);
+            subscriber.next({ metadata: message, observable: subject });
             break;
         case 'event':
             // console.log(`uuid ${message.message.observable} producers has ${subjects.has(message.message.observable)} size ${subjects.size}`);

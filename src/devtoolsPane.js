@@ -9,15 +9,12 @@ export default function DevtoolsPane() {
     const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
     const [subscriptions, setSubscriptions] = useState([]);
 
-    useLayoutEffect(() => {
-        let subscription;
-        getSubscription$().then(sub$ => {
-            subscription = sub$
-                .pipe(map(val => val[0]))
-                .subscribe(sub => {
-                    console.log(sub);
-                    setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs]);
-                });
+    useLayoutEffect(async () => {
+        const subscription = await getSubscription$();
+        
+        subscription.subscribe(message => {
+            const { metadata, observable } = message;
+            setSubscriptions(subscriptions => [createSubscription(metadata.uuid, metadata.identifier, metadata.type), ...subscriptions]);
         });
 
         // const subscription = subscription$.subscribe(sub => {
