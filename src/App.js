@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './App.css';
 import DevtoolsPane from './devtoolsPane';
+import { ObservableProvider } from './contexts/observableContext';
 
 
-function App() {
+export default function App() {
+
   return (
-    <div className='App'>
-      <DevtoolsPane />
-    </div>
+    <ObservableProvider>
+      <div className='App'>
+        <DevtoolsPane />
+      </div>
+    </ObservableProvider>
   );
 }
-
-export default App;
