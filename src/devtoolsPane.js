@@ -10,11 +10,13 @@ export default function DevtoolsPane() {
     const dispatch = useContext(DispatchContext);
     const observables = useContext(ObservableContext);
 
+    console.log(observables);
+
     useEffect(() => {
         (async () => {
             const message$ = await getMessage$();
             const subscription = message$.subscribe(msg => {
-                dispatch({ type: 'test', payload: msg });
+                dispatch({ type: msg.type, payload: msg.message });
             });
 
             return () => subscription.unsubscribe();
@@ -39,10 +41,10 @@ export default function DevtoolsPane() {
     return (
         <div className='DevtoolsPane' onClick={() => dispatch({ type: 'test', payload: 1 })}>
             test
-            {/* {subscriptions
+            {observables.observables
                 .map(sub => {
-                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type}></Subscription>
-                })} */}
+                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type} child$={sub.child$}></Subscription>
+                })}
         </div>
     );
 }

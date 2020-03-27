@@ -12,9 +12,9 @@ const initalState = {
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'test':
+        case 'observable':
             console.log(action.payload);
-            break;
+            return { ...state, observables: [...state.observables, action.payload] };
         default:
             throw new Error('Invalid action type!');
     }
