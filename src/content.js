@@ -1,6 +1,6 @@
 //@ts-check
-import { Observable, Subject } from 'rxjs';
-import { getObservableMock } from './mockMessages';
+import { Observable } from 'rxjs';
+import { getObservableMock, getOperatorMock } from './mockMessages';
 
 export const observable$ = new Observable();
 export const event$ = new Observable();
@@ -10,27 +10,29 @@ export let print = console.log; // For development purpose.
 // Mock some messages for development.
 const mockMessages = () => {
     return new Observable(subscriber => {
-        // subscriber.next('Hello World.');
-        dispatchMessage(subscriber, getObservableMock())
+        const observable = getObservableMock();
+        dispatchMessage(subscriber, observable);
+        dispatchMessage(subscriber, getObservableMock());
+        dispatchMessage(subscriber, getOperatorMock(observable.message.uuid));
     });
 };
 
-const childs$ = new Map();
-
-// Dispatch given message over given subscriber.
 const dispatchMessage = (subscriber, message) => {
     switch (message.type) {
         case 'observable':
             const { message: observable } = message;
-            observable.child$ = new Subject();
-            childs$.set(observable.uuid, observable.child$);
-            subscriber.next({ type: 'observable', message: observable }); break;
+            return subscriber.next({ type: 'observable', message: observable });
+        case 'operator':
+            const { message: operator } = message;
+            return subscriber.next({ type: 'operator', message: operator });
+        default:
+            throw new Error(`Invalid message type ${message.type} !`);
     }
 }
 
 const development = true;
 
-// Get message source$.
+// Get promise of message source$.
 export const getMessage$ = () => {
     if (development)   // Outside extension there is no chrome object.
         return new Promise(resolve => resolve(mockMessages()));

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './subscription.css';
 import MarbleDiagram from './marbleDiagram';
+import { ObservableContext } from './contexts/observableContext';
+import * as uuid from 'uuid/v4';
 
 export default function Subscription(props) {
     const [open, setOpen] = useState(false);
+    const { operators } = useContext(ObservableContext);
 
     const openSubscription = () => {
         setOpen(!open);
@@ -18,7 +21,12 @@ export default function Subscription(props) {
             </div>
 
             <div className={`marble-diagram${open ? ' open' : ''}`}>
-                <MarbleDiagram observable={props.uuid}></MarbleDiagram>
+                {operators
+                    .filter(operator => operator.observable === props.uuid)
+                    .map(operator => {
+                        return <div key={uuid()}>{operator.function}</div>
+                    })}
+                {/* <MarbleDiagram observable={props.uuid}></MarbleDiagram> */}
             </div>
         </div>
     );

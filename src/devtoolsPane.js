@@ -1,16 +1,13 @@
-import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './devtoolsPane.css';
 import Subscription from './subscription';
-import { observable$, reset$, getMessage$ } from './content';
+import { getMessage$ } from './content';
 import * as uuid from 'uuid/v4';
-import { take } from 'rxjs/operators';
 import { DispatchContext, ObservableContext } from './contexts/observableContext';
 
 export default function DevtoolsPane() {
     const dispatch = useContext(DispatchContext);
-    const observables = useContext(ObservableContext);
-
-    console.log(observables);
+    const { observables } = useContext(ObservableContext);
 
     useEffect(() => {
         (async () => {
@@ -21,29 +18,14 @@ export default function DevtoolsPane() {
 
             return () => subscription.unsubscribe();
         })();
-    }, []);
-
-    // const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
-    // const [subscriptions, setSubscriptions] = useState([]);
-
-    // useLayoutEffect(() => {
-    //     const subscription = observable$.subscribe(sub => {
-    //         setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
-    //     });
-
-    //     reset$.subscribe(() => {
-    //         setSubscriptions([]);
-    //     });
-
-    //     return () => subscription.unsubscribe();
-    // }, []);
+    }, [dispatch]);
 
     return (
-        <div className='DevtoolsPane' onClick={() => dispatch({ type: 'test', payload: 1 })}>
+        <div className='DevtoolsPane'>
             test
-            {observables.observables
-                .map(sub => {
-                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type} child$={sub.child$}></Subscription>
+            {observables
+                .map(observable => {
+                    return <Subscription key={uuid()} uuid={observable.uuid} type={observable.type}></Subscription>
                 })}
         </div>
     );
