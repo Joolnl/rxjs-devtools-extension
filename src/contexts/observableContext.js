@@ -14,8 +14,12 @@ const reducer = (state, action) => {
     switch (action.type) {
         case 'observable':
             return { ...state, observables: [...state.observables, action.payload] };
+        case 'pipe':
+            return { ...state, pipes: [...state.pipes, action.payload] };
         case 'operator':
             return { ...state, operators: [...state.operators, action.payload] };
+        case 'subscription':
+            return { ...state, subscribers: [...state.subscribers, action.payload] };
         default:
             throw new Error(`Invalid action type ${action.type}!`);
     }
