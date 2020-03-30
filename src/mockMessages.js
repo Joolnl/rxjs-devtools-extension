@@ -49,7 +49,7 @@ export const getPipeMock = observable => {
     };
 }
 
-export const getOperatorMock = observable => {
+export const getOperatorMock = (observable, pipe = null) => {
     return {
         type: 'operator',
         message: {
@@ -57,6 +57,7 @@ export const getOperatorMock = observable => {
             type: getRandomOperatorType(),
             function: 'x => x += 1',
             observable: observable,
+            pipe: pipe,
             file: 'mockMessages.js',
             line: 37
         }
