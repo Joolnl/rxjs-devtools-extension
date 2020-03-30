@@ -36,6 +36,19 @@ export const getObservableMock = () => {
     };
 }
 
+export const getPipeMock = observable => {
+    return {
+        type: 'pipe',
+        message: {
+            uuid: uuid(),
+            observable: observable,
+            identifier: 'anonymous',
+            file: 'mockMessages.js',
+            line: 39
+        }
+    };
+}
+
 export const getOperatorMock = observable => {
     return {
         type: 'operator',
@@ -49,6 +62,19 @@ export const getOperatorMock = observable => {
         }
     }
 }
+
+export const getSubscriptionMock = (observable, pipes) => {
+    return {
+        type: 'subscription',
+        message: {
+            observable: observable,
+            pipes: pipes,
+            function: '(x => console.log(x))',
+            file: 'mockMessages.js',
+            line: 66
+        }
+    };
+};
 
 export const getEventMock = (observable, phases) => {
     const id = uuid();
