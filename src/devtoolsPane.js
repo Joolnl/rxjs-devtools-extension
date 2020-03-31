@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import './devtoolsPane.css';
-import Subscription from './subscription';
+import Observable from './observable';
 import { getMessage$ } from './content';
 import * as uuid from 'uuid/v4';
 import { DispatchContext, ObservableContext } from './contexts/observableContext';
@@ -9,6 +9,7 @@ export default function DevtoolsPane() {
     const dispatch = useContext(DispatchContext);
     const { observables } = useContext(ObservableContext);
 
+    // Receive messages from content script and feed to observable dispatcher.
     useEffect(() => {
         (async () => {
             const message$ = await getMessage$();
@@ -22,10 +23,9 @@ export default function DevtoolsPane() {
 
     return (
         <div className='DevtoolsPane'>
-            test
             {observables
                 .map(observable => {
-                    return <Subscription key={uuid()} uuid={observable.uuid} type={observable.type}></Subscription>
+                    return <Observable key={uuid()} observable={observable.uuid} type={observable.type}></Observable>
                 })}
         </div>
     );

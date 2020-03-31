@@ -12,11 +12,18 @@ const mockMessages = () => {
     return new Observable(subscriber => {
         const observable = getObservableMock();
         const pipe = getPipeMock(observable.message.uuid);
+        const pipe2 = getPipeMock(observable.message.uuid);
         dispatchMessage(subscriber, observable);
         dispatchMessage(subscriber, getObservableMock());
         dispatchMessage(subscriber, pipe);
+        dispatchMessage(subscriber, pipe2);
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
-        dispatchMessage(subscriber, getSubscriptionMock(observable, [pipe]));
+        dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
+        dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
+        dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe2.message.uuid));
+        dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe.message.uuid]));
+        dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, []));
+        dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe2.message.uuid]));
     });
 };
 
@@ -57,7 +64,7 @@ export const getMessage$ = () => {
     return new Promise(resolve => {
         resolve(
             new Observable(subscriber => {
-                backgroundPageConnection.addListener(msg => {
+                backgroundPageConnection.onMessage.addListener(msg => {
                     // subscriber.next(msg);
                     dispatchMessage(subscriber, msg);
                 });
