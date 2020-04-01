@@ -18,7 +18,8 @@ export default function Subscription(props) {
     const eventsForSubscription = subscription => {
         return subscribeEvents
             .filter(event => event.receiver === subscription)
-            .map(event => event.data);
+            .map(event => event.data)
+            .map(event => JSON.stringify(event));
     };
 
     return (

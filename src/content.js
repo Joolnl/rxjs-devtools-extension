@@ -23,18 +23,18 @@ const mockMessages = () => {
         dispatchMessage(subscriber, subscription1);
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, []));
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe2.message.uuid]));
-        dispatchMessage(subscriber, getEventMock('1', pipe, 'initial'));
-        dispatchMessage(subscriber, getEventMock('2', pipe, 'initial'));
-        dispatchMessage(subscriber, getEventMock('3', pipe, 'initial'));
+        dispatchMessage(subscriber, getEventMock('1', pipe.message.uuid, 'initial'));
+        dispatchMessage(subscriber, getEventMock('2', pipe.message.uuid, 'initial'));
+        dispatchMessage(subscriber, getEventMock('3', pipe.message.uuid, 'initial'));
         dispatchMessage(subscriber, getEventMock('1', operator1.message.uuid, 'operator'));
         dispatchMessage(subscriber, getEventMock('2', operator1.message.uuid, 'operator'));
         dispatchMessage(subscriber, getEventMock('3', operator1.message.uuid, 'operator'));
         dispatchMessage(subscriber, getEventMock('1', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('2', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('3', subscription1.message.uuid, 'subscribe'));
-        setTimeout(() => {
-            dispatchMessage(subscriber, { type: 'reset' });
-        }, 5000);
+        // setTimeout(() => {
+        //     dispatchMessage(subscriber, { type: 'reset' });
+        // }, 5000);
     });
 };
 
@@ -43,19 +43,25 @@ const dispatchMessage = (subscriber, message) => {
     switch (message.type) {
         case 'observable':
             const { message: observable } = message;
+            print(`observable line ${observable.line} uuid ${observable.uuid}`);
             return subscriber.next({ type: 'observable', message: observable });
         case 'pipe':
             const { message: pipe } = message;
+            print(`pipe line ${pipe.line} uuid ${pipe.uuid} observable ${pipe.observable}`);
             return subscriber.next({ type: 'pipe', message: pipe });
         case 'operator':
             const { message: operator } = message;
+            print(`operator ${operator.function} line ${operator.line} pipe ${operator.pipe}`);
             return subscriber.next({ type: 'operator', message: operator });
         case 'subscribe':
             const { message: subscription } = message;
+            print(`subscription line ${subscription.line} observable ${subscription.observable}`);
             return subscriber.next({ type: 'subscription', message: subscription });
         case 'event':
             const { message: event } = message;
             return subscriber.next({ type: 'event', message: event });
+        case 'subscribeEvent': // TODO: Implement.
+            break;
         case 'reset':
             return subscriber.next(message);
         default:

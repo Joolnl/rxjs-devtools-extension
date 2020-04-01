@@ -11,13 +11,17 @@ export default function Pipe(props) {
     const { initialEvents, operatorEvents } = useContext(EventContext);
 
     const initialEventData = () => {
-        return initialEvents.map(event => event.data);
+        return initialEvents
+            .filter(event => event.receiver === props.pipe)
+            .map(event => event.data)
+            .map(event => JSON.stringify(event));
     };
 
     const eventsForOperator = operator => {
         return operatorEvents
             .filter(event => event.receiver === operator)
-            .map(event => event.data);
+            .map(event => event.data)
+            .map(event => JSON.stringify(event));
     };
 
     return (
