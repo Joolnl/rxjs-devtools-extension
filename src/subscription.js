@@ -3,13 +3,22 @@ import { ObservableContext } from './contexts/observableContext';
 import * as uuid from 'uuid/v4';
 import Pipe from './pipe';
 import './subscription.css';
+import { EventContext } from './contexts/eventContext';
+import MarbleLane from './marbleLane';
 
 export default function Subscription(props) {
     const [open, setOpen] = useState(false);
     const { pipes } = useContext(ObservableContext);
+    const { subscribeEvents } = useContext(EventContext);
 
     const openSubscription = () => {
         setOpen(!open);
+    };
+
+    const eventsForSubscription = subscription => {
+        return subscribeEvents
+            .filter(event => event.receiver === subscription)
+            .map(event => event.data);
     };
 
     return (
@@ -27,6 +36,7 @@ export default function Subscription(props) {
                         return <Pipe key={uuid()} pipe={pipe.uuid} />
                     })
                 }
+                <MarbleLane marbles={eventsForSubscription(props.uuid)} />
             </div>
         </div>
     );

@@ -29,7 +29,7 @@ export default function Observable(props) {
             <div className={`marble-diagram${open ? ' open' : ''}`}>
                 {subscriptions()
                     .map(sub => {
-                        return <Subscription key={uuid()} pipes={sub.pipes} line={sub.line} file={sub.file} />
+                        return <Subscription key={uuid()} uuid={sub.uuid} pipes={sub.pipes} line={sub.line} file={sub.file} />
                     })
                 }
             </div>

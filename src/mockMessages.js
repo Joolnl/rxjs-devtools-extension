@@ -68,6 +68,7 @@ export const getSubscriptionMock = (observable, pipes) => {
     return {
         type: 'subscription',
         message: {
+            uuid: uuid(),
             observable: observable,
             pipes: pipes,
             function: '(x => console.log(x))',

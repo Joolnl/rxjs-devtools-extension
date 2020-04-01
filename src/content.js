@@ -14,6 +14,7 @@ const mockMessages = () => {
         const pipe = getPipeMock(observable.message.uuid);
         const pipe2 = getPipeMock(observable.message.uuid);
         const operator1  = getOperatorMock(observable.message.uuid, pipe.message.uuid);
+        const subscription1 = getSubscriptionMock(observable.message.uuid, [pipe.message.uuid]);
         dispatchMessage(subscriber, observable);
         dispatchMessage(subscriber, getObservableMock());
         dispatchMessage(subscriber, pipe);
@@ -22,7 +23,7 @@ const mockMessages = () => {
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe2.message.uuid));
-        dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe.message.uuid]));
+        dispatchMessage(subscriber, subscription1);
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, []));
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe2.message.uuid]));
         dispatchMessage(subscriber, getEventMock('1', pipe, 'initial'));
@@ -31,6 +32,9 @@ const mockMessages = () => {
         dispatchMessage(subscriber, getEventMock('1', operator1.message.uuid, 'operator'));
         dispatchMessage(subscriber, getEventMock('2', operator1.message.uuid, 'operator'));
         dispatchMessage(subscriber, getEventMock('3', operator1.message.uuid, 'operator'));
+        dispatchMessage(subscriber, getEventMock('1', subscription1.message.uuid, 'subscribe'));
+        dispatchMessage(subscriber, getEventMock('2', subscription1.message.uuid, 'subscribe'));
+        dispatchMessage(subscriber, getEventMock('3', subscription1.message.uuid, 'subscribe'));
     });
 };
 
