@@ -50,7 +50,7 @@ const dispatchMessage = (subscriber, message) => {
         case 'operator':
             const { message: operator } = message;
             return subscriber.next({ type: 'operator', message: operator });
-        case 'subscription':
+        case 'subscribe':
             const { message: subscription } = message;
             return subscriber.next({ type: 'subscription', message: subscription });
         case 'event':

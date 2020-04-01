@@ -66,7 +66,7 @@ export const getOperatorMock = (observable, pipe = null) => {
 
 export const getSubscriptionMock = (observable, pipes) => {
     return {
-        type: 'subscription',
+        type: 'subscribe',
         message: {
             uuid: uuid(),
             observable: observable,
