@@ -85,7 +85,7 @@ export const getEventMock = (id, receiver, eventType) => {
             id: id,
             data: getRandomInteger(),
             receiver: receiver,
-            eventType: eventType,
+            type: eventType,
             file: 'mockMessages.js',
             line: 80
         }

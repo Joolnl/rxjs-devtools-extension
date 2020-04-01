@@ -64,7 +64,7 @@ const dispatchMessage = (subscriber, message) => {
 }
 
 // Development flag.
-const development = true;
+const development = false;
 
 // Get promise of message source$.
 export const getMessage$ = () => {

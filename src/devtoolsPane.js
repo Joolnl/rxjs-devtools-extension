@@ -18,7 +18,7 @@ export default function DevtoolsPane() {
             const subscription = message$.subscribe(msg => {
                 if (msg.type === 'event') {
                     const { message } = msg;
-                    eventDispatch({ type: message.eventType, payload: message });
+                    eventDispatch({ type: message.type, payload: message });
                 } else {
                     observableDispatch({ type: msg.type, payload: msg.message });
                 }
