@@ -2,9 +2,6 @@
 import { Observable } from 'rxjs';
 import { getObservableMock, getOperatorMock, getPipeMock, getSubscriptionMock, getEventMock } from './mockMessages';
 
-export const observable$ = new Observable();    //@TODO: Deprecated.
-export const event$ = new Observable(); //@TODO: Deprecated.
-export const operator$ = new Observable();  //@TODO: Deprecated.
 export let print = console.log; // For development purpose.
 
 // Mock some messages for development.
@@ -13,7 +10,7 @@ const mockMessages = () => {
         const observable = getObservableMock();
         const pipe = getPipeMock(observable.message.uuid);
         const pipe2 = getPipeMock(observable.message.uuid);
-        const operator1  = getOperatorMock(observable.message.uuid, pipe.message.uuid);
+        const operator1 = getOperatorMock(observable.message.uuid, pipe.message.uuid);
         const subscription1 = getSubscriptionMock(observable.message.uuid, [pipe.message.uuid]);
         dispatchMessage(subscriber, observable);
         dispatchMessage(subscriber, getObservableMock());
@@ -35,6 +32,9 @@ const mockMessages = () => {
         dispatchMessage(subscriber, getEventMock('1', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('2', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('3', subscription1.message.uuid, 'subscribe'));
+        setTimeout(() => {
+            dispatchMessage(subscriber, { type: 'reset' });
+        }, 5000);
     });
 };
 
@@ -56,6 +56,8 @@ const dispatchMessage = (subscriber, message) => {
         case 'event':
             const { message: event } = message;
             return subscriber.next({ type: 'event', message: event });
+        case 'reset':
+            return subscriber.next(message);
         default:
             throw new Error(`Invalid message type ${message.type}!`);
     }
