@@ -77,44 +77,16 @@ export const getSubscriptionMock = (observable, pipes) => {
     };
 };
 
-export const getEventMock = (observable, phases) => {
-    const id = uuid();
-    const result = [];
-    for (let i = 0; i < phases; i++) {
-        result.push(
-            {
-                type: 'event',
-                message: {
-                    data: getRandomInteger(),
-                    observable: observable,
-                    uuid: id,
-                    file: 'mockMessages.js',
-                    line: 53
-                }
-            }
-        );
-    }
-    return result;
-};
-
-const eventMessage = {
-    type: 'event',
-    message: {
-        data: '1',
-        observable: '1',
-        uuid: '1',
-        file: '/app/app_component.ts',
-        line: 12
-    }
-};
-
-const eventMessage2 = {
-    type: 'event',
-    message: {
-        data: 'b',
-        observable: '1',
-        uuid: '2',
-        file: '/app/app_component.ts',
-        line: 12
+export const getEventMock = (id, receiver, eventType) => {
+    return {
+        type: 'event',
+        message: {
+            id: id,
+            data: getRandomInteger(),
+            receiver: receiver,
+            eventType: eventType,
+            file: 'mockMessages.js',
+            line: 80
+        }
     }
 };

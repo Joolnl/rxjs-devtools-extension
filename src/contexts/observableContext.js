@@ -8,7 +8,7 @@ const initalState = {
     pipes: [],
     operators: [],
     subscribers: []
-}
+};
 
 const reducer = (state, action) => {
     switch (action.type) {

@@ -3,10 +3,12 @@ import './devtoolsPane.css';
 import Observable from './observable';
 import { getMessage$ } from './content';
 import * as uuid from 'uuid/v4';
-import { DispatchContext, ObservableContext } from './contexts/observableContext';
+import { DispatchContext as ObservableDispatch, ObservableContext } from './contexts/observableContext';
+import { DispatchContext as EventDispatch } from './contexts/eventContext';
 
 export default function DevtoolsPane() {
-    const dispatch = useContext(DispatchContext);
+    const observableDispatch = useContext(ObservableDispatch);
+    const eventDispatch = useContext(EventDispatch);
     const { observables } = useContext(ObservableContext);
 
     // Receive messages from content script and feed to observable dispatcher.
@@ -14,12 +16,17 @@ export default function DevtoolsPane() {
         (async () => {
             const message$ = await getMessage$();
             const subscription = message$.subscribe(msg => {
-                dispatch({ type: msg.type, payload: msg.message });
+                if (msg.type === 'event') {
+                    const { message } = msg;
+                    eventDispatch({ type: message.eventType, payload: message });
+                } else {
+                    observableDispatch({ type: msg.type, payload: msg.message });
+                }
             });
 
             return () => subscription.unsubscribe();
         })();
-    }, [dispatch]);
+    }, [observableDispatch, eventDispatch]);
 
     return (
         <div className='DevtoolsPane'>

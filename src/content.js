@@ -1,6 +1,6 @@
 //@ts-check
 import { Observable } from 'rxjs';
-import { getObservableMock, getOperatorMock, getPipeMock, getSubscriptionMock } from './mockMessages';
+import { getObservableMock, getOperatorMock, getPipeMock, getSubscriptionMock, getEventMock } from './mockMessages';
 
 export const observable$ = new Observable();    //@TODO: Deprecated.
 export const event$ = new Observable(); //@TODO: Deprecated.
@@ -13,17 +13,24 @@ const mockMessages = () => {
         const observable = getObservableMock();
         const pipe = getPipeMock(observable.message.uuid);
         const pipe2 = getPipeMock(observable.message.uuid);
+        const operator1  = getOperatorMock(observable.message.uuid, pipe.message.uuid);
         dispatchMessage(subscriber, observable);
         dispatchMessage(subscriber, getObservableMock());
         dispatchMessage(subscriber, pipe);
         dispatchMessage(subscriber, pipe2);
-        dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
+        dispatchMessage(subscriber, operator1);
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe.message.uuid));
         dispatchMessage(subscriber, getOperatorMock(observable.message.uuid, pipe2.message.uuid));
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe.message.uuid]));
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, []));
         dispatchMessage(subscriber, getSubscriptionMock(observable.message.uuid, [pipe2.message.uuid]));
+        dispatchMessage(subscriber, getEventMock('1', pipe, 'initial'));
+        dispatchMessage(subscriber, getEventMock('2', pipe, 'initial'));
+        dispatchMessage(subscriber, getEventMock('3', pipe, 'initial'));
+        dispatchMessage(subscriber, getEventMock('1', operator1.message.uuid, 'operator'));
+        dispatchMessage(subscriber, getEventMock('2', operator1.message.uuid, 'operator'));
+        dispatchMessage(subscriber, getEventMock('3', operator1.message.uuid, 'operator'));
     });
 };
 
@@ -42,6 +49,9 @@ const dispatchMessage = (subscriber, message) => {
         case 'subscription':
             const { message: subscription } = message;
             return subscriber.next({ type: 'subscription', message: subscription });
+        case 'event':
+            const { message: event } = message;
+            return subscriber.next({ type: 'event', message: event });
         default:
             throw new Error(`Invalid message type ${message.type}!`);
     }
