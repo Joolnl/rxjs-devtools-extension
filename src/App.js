@@ -1,14 +1,19 @@
 import React from 'react';
 import './App.css';
 import DevtoolsPane from './devtoolsPane';
+import { ObservableProvider } from './contexts/observableContext';
+import { EventProvider } from './contexts/eventContext';
 
 
-function App() {
+export default function App() {
+
   return (
-    <div className='App'>
-      <DevtoolsPane />
-    </div>
+    <ObservableProvider>
+      <EventProvider>
+        <div className='App'>
+          <DevtoolsPane />
+        </div>
+      </EventProvider>
+    </ObservableProvider>
   );
 }
-
-export default App;

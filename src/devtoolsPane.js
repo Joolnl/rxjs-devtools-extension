@@ -1,31 +1,38 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './devtoolsPane.css';
-import Subscription from './subscription';
-import { observable$, reset$ } from './content';
+import Observable from './observable';
+import { getMessage$ } from './content';
 import * as uuid from 'uuid/v4';
-import { take } from 'rxjs/operators';
+import { DispatchContext as ObservableDispatch, ObservableContext } from './contexts/observableContext';
+import { DispatchContext as EventDispatch } from './contexts/eventContext';
 
 export default function DevtoolsPane() {
-    const createSubscription = (uuid, observable, type) => ({ uuid, observable, type });
-    const [subscriptions, setSubscriptions] = useState([]);
+    const observableDispatch = useContext(ObservableDispatch);
+    const eventDispatch = useContext(EventDispatch);
+    const { observables } = useContext(ObservableContext);
 
-    useLayoutEffect(() => {
-        const subscription = observable$.subscribe(sub => {
-            setSubscriptions(subs => [createSubscription(sub.uuid, sub.identifier, sub.type), ...subs])
-        });
+    // Receive messages from content script and feed to observable dispatcher.
+    useEffect(() => {
+        (async () => {
+            const message$ = await getMessage$();
+            const subscription = message$.subscribe(msg => {
+                if (msg.type === 'event') {
+                    const { message } = msg;
+                    eventDispatch({ type: message.type, payload: msg.message });
+                } else {
+                    observableDispatch({ type: msg.type, payload: msg.message });
+                }
+            });
 
-        reset$.subscribe(() => {
-            setSubscriptions([]);
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
+            return () => subscription.unsubscribe();
+        })();
+    }, [observableDispatch, eventDispatch]);
 
     return (
         <div className='DevtoolsPane'>
-            {subscriptions
-                .map(sub => {
-                    return <Subscription key={uuid()} uuid={sub.uuid} observable={sub.observable} type={sub.type}></Subscription>
+            {observables
+                .map(observable => {
+                    return <Observable key={uuid()} observable={observable.uuid} type={observable.type}></Observable>
                 })}
         </div>
     );
