@@ -1,6 +1,6 @@
 //@ts-check
 import { Observable } from 'rxjs';
-import { getObservableMock, getOperatorMock, getPipeMock, getSubscriptionMock, getEventMock } from './mockMessages';
+import { getObservableMock, getOperatorMock, getPipeMock, getSubscriptionMock, getEventMock, getJoinObservableMock } from './mockMessages';
 
 export let print = console.log; // For development purpose.
 
@@ -32,6 +32,19 @@ const mockMessages = () => {
         dispatchMessage(subscriber, getEventMock('1', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('2', subscription1.message.uuid, 'subscribe'));
         dispatchMessage(subscriber, getEventMock('3', subscription1.message.uuid, 'subscribe'));
+
+        const observableAlfa = getObservableMock();
+        const pipeAlfa  = getPipeMock(observableAlfa.message.uuid);
+        const operatora = getOperatorMock(observableAlfa.message.uuid, pipeAlfa.message.uuid);
+        const observable2 = getObservableMock();
+        const merge = getJoinObservableMock([observableAlfa.message.uuid, observable2.message.uuid]);   
+        dispatchMessage(subscriber, observableAlfa);
+        dispatchMessage(subscriber, pipeAlfa);
+        dispatchMessage(subscriber, operatora);
+        dispatchMessage(subscriber, observable2);
+        dispatchMessage(subscriber, getSubscriptionMock(observableAlfa.message.uuid, [pipeAlfa.message.uuid]));
+        dispatchMessage(subscriber, merge);
+        dispatchMessage(subscriber, getSubscriptionMock(merge.message.uuid, []));
         // setTimeout(() => {
         //     dispatchMessage(subscriber, { type: 'reset' });
         // }, 5000);
@@ -45,6 +58,10 @@ const dispatchMessage = (subscriber, message) => {
             const { message: observable } = message;
             print(`observable line ${observable.line} uuid ${observable.uuid}`);
             return subscriber.next({ type: 'observable', message: observable });
+        case 'joinObservable':
+            const { message: joinObservable } = message;
+            print(`join observable line ${joinObservable.line} uuid ${joinObservable.uuid}`);
+            return subscriber.next({ type: 'joinObservable', message: joinObservable });
         case 'pipe':
             const { message: pipe } = message;
             print(`pipe line ${pipe.line} uuid ${pipe.uuid} observable ${pipe.observable}`);
@@ -70,7 +87,7 @@ const dispatchMessage = (subscriber, message) => {
 }
 
 // Development flag.
-const development = false;
+const development = true;
 
 // Get promise of message source$.
 export const getMessage$ = () => {

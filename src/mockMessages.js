@@ -6,6 +6,11 @@ const getRandomObservableType = () => {
     return observableTypes[Math.floor(Math.random() * observableTypes.length)];
 }
 
+const getRandomJoinObservableType = () => {
+    const observableTypes = ['combineLatest', 'concat', 'forkJoin', 'merge', 'race', 'zip'];
+    return observableTypes[Math.floor(Math.random() * observableTypes.length)];
+};
+
 const getRandomOperatorType = () => {
     const operators = ['buffer', 'bufferCount', 'bufferTime', 'bufferToggle', 'bufferWhen', 'concatMap', 'concatMapTo',
         'exhaust', 'exhaustMap', 'expand', 'groupBy', 'map', 'mapTo', 'mergeMap', 'mergeMapTo', 'mergeScan', 'pairwise',
@@ -29,6 +34,26 @@ export const getObservableMock = () => {
         message: {
             uuid: uuid(),
             type: getRandomObservableType(),
+            identifier: getUniqueIdentifier('Observable'),
+            file: 'mockMessages.js',
+            line: 14
+        }
+    };
+}
+
+export const getJoinObservableMock = (observables) => {
+    return {
+        type: 'joinObservable',
+        message: {
+            uuid: uuid(),
+            type: getRandomJoinObservableType(),
+            observables: observables.map(id => {
+                return {
+                    uuid: id,
+                    identifier: getUniqueIdentifier('base observable'),
+                    type: getRandomObservableType()
+                };
+            }),
             identifier: getUniqueIdentifier('Observable'),
             file: 'mockMessages.js',
             line: 14

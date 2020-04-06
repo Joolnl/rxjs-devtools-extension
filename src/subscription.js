@@ -32,7 +32,7 @@ export default function Subscription(props) {
             </div>
             <div className={`content${open ? ' open' : ''}`}>
                 {pipes
-                    .filter(pipe => props.pipes.includes(pipe.uuid))
+                    .filter(pipe => props.pipes && props.pipes.includes(pipe.uuid))
                     .map(pipe => {
                         return <Pipe key={uuid()} pipe={pipe.uuid} />
                     })

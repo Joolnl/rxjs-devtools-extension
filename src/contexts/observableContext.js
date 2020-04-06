@@ -13,7 +13,9 @@ const initialState = {
 const reducer = (state, action) => {
     switch (action.type) {
         case 'observable':
-            return { ...state, observables: [...state.observables, action.payload] };
+            return { ...state, observables: [...state.observables, { ...action.payload, join: false }] };
+        case 'joinObservable':
+            return { ...state, observables: [...state.observables, { ...action.payload, join: true }] };
         case 'pipe':
             return { ...state, pipes: [...state.pipes, action.payload] };
         case 'operator':

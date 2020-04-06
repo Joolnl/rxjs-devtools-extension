@@ -32,7 +32,11 @@ export default function DevtoolsPane() {
         <div className='DevtoolsPane'>
             {observables
                 .map(observable => {
-                    return <Observable key={uuid()} observable={observable.uuid} type={observable.type}></Observable>
+                    return <Observable
+                        key={uuid()}
+                        observable={observable.uuid}
+                        type={observable.type}
+                        baseObservables={observable.observables} />
                 })}
         </div>
     );
