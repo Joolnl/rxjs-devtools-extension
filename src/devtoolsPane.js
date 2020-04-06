@@ -11,6 +11,10 @@ export default function DevtoolsPane() {
     const eventDispatch = useContext(EventDispatch);
     const { observables } = useContext(ObservableContext);
 
+    const nonJoinObservables = () => {
+        return observables.filter(observable => !observable.join);
+    };
+
     // Receive messages from content script and feed to observable dispatcher.
     useEffect(() => {
         (async () => {
@@ -30,7 +34,7 @@ export default function DevtoolsPane() {
 
     return (
         <div className='DevtoolsPane'>
-            {observables
+            {nonJoinObservables()
                 .map(observable => {
                     return <Observable
                         key={uuid()}

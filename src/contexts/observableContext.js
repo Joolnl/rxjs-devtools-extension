@@ -10,12 +10,23 @@ const initialState = {
     subscribers: []
 };
 
+
+
+const setJoin = updateList => observable => updateList.includes(observable.uuid) ? { ...observable, join: true } : observable;
+
+// Mark observables as join.
+const markObservablesAsJoin = (observables, updateList) => {
+    return observables.map(setJoin(updateList));
+};
+
 const reducer = (state, action) => {
     switch (action.type) {
         case 'observable':
             return { ...state, observables: [...state.observables, { ...action.payload, join: false }] };
         case 'joinObservable':
-            return { ...state, observables: [...state.observables, { ...action.payload, join: true }] };
+            const baseObservables = action.payload.observables || [];
+            const updateList = baseObservables.map(observable =>  observable.uuid);
+            return { ...state, observables: [...markObservablesAsJoin(state.observables, updateList), { ...action.payload, join: false }] };
         case 'pipe':
             return { ...state, pipes: [...state.pipes, action.payload] };
         case 'operator':
