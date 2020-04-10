@@ -17,6 +17,8 @@ const reducer = (state, action) => {
             return { ...state, operatorEvents: [...state.operatorEvents, action.payload] };
         case 'subscribe':
             return { ...state, subscribeEvents: [...state.subscribeEvents, action.payload] };
+        case 'reset':
+            return initialState;
         default:
             throw new Error(`Invalid event type given ${action.type}!`);
     }

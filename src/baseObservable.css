@@ -1,0 +1,22 @@
+div.BaseObservable div.header {
+    background-color: #f0f0f0;
+    font-size: 1em;
+    margin: 1px 0;
+    padding: 1px;
+    width: 99%;
+    font-weight: bold;
+    padding-left: 5%;
+}
+
+div.BaseObservable div.header span {
+    margin-right: 1vw;
+}
+
+div.BaseObservable div.pipe {
+    display: none;
+    width: 100%;
+}
+
+div.BaseObservable div.pipe.open {
+    display: inline-block;
+}

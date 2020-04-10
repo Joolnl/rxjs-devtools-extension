@@ -20,11 +20,17 @@ export default function DevtoolsPane() {
         (async () => {
             const message$ = await getMessage$();
             const subscription = message$.subscribe(msg => {
-                if (msg.type === 'event') {
-                    const { message } = msg;
-                    eventDispatch({ type: message.type, payload: msg.message });
-                } else {
-                    observableDispatch({ type: msg.type, payload: msg.message });
+                switch (msg.type) {
+                    case 'reset':
+                        eventDispatch({type: 'reset'});
+                        observableDispatch({type: 'reset'});
+                        break;
+                    case 'event':
+                        const { message } = msg;
+                        eventDispatch({ type: message.type, payload: msg.message });
+                        break;
+                    default:
+                        observableDispatch({ type: msg.type, payload: msg.message });
                 }
             });
 
