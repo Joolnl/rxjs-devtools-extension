@@ -103,13 +103,14 @@ export const getSubscriptionMock = (observable, pipes) => {
     };
 };
 
-export const getEventMock = (id, receiver, eventType) => {
+export const getEventMock = (id, observable, receiver, eventType) => {
     return {
         type: 'event',
         message: {
             id: id,
+            observable,
             data: getRandomInteger(),
-            receiver: receiver,
+            receiver,
             type: eventType,
             file: 'mockMessages.js',
             line: 80

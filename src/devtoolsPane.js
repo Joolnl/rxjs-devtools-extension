@@ -44,6 +44,7 @@ export default function DevtoolsPane() {
                 .map(observable => {
                     return <Observable
                         key={uuid()}
+                        identifier={observable.identifier}
                         observable={observable.uuid}
                         type={observable.type}
                         baseObservables={observable.observables} />

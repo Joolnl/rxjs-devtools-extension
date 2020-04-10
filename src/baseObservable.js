@@ -25,7 +25,6 @@ export default function BaseObservable(props) {
             <div className={`header${open ? ' open' : ''}`} onClick={openObservable}>
                 <span>{props.identifier}</span>
                 <span>{props.type}</span>
-                <span>{props.uuid}</span>
             </div>
             <div className={`pipe${open ? ' open' : ''}`}>
                 {getPipes().map(pipe => {

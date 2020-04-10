@@ -32,6 +32,10 @@ span.fat {
     font-weight: bold;
 }
 
+div.Observable span.meta {
+    float: right;
+}
+
 div.marble-diagram {
     background-color: white;
     width: 100%;

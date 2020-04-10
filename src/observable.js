@@ -4,10 +4,12 @@ import { ObservableContext } from './contexts/observableContext';
 import * as uuid from 'uuid/v4';
 import Subscription from './subscription';
 import BaseObservable from './baseObservable';
+import { EventContext } from './contexts/eventContext';
 
 export default function Observable(props) {
     const [open, setOpen] = useState(false);
     const { subscribers, observables } = useContext(ObservableContext);
+    const { initialEvents } = useContext(EventContext);
 
     const openObservable = () => {
         setOpen(!open);
@@ -16,6 +18,12 @@ export default function Observable(props) {
     const subscriptions = () => {
         return subscribers.filter(sub => sub.observable === props.observable || sub.observable === props.parent);
     };
+
+    const subscriptionAmount = () => subscriptions().length;
+
+    const eventAmount = () => {
+        return initialEvents.filter(event => event.observable === props.observable).length;
+    }
 
     const baseObservables = () => {
         if (props.baseObservables) {
@@ -30,9 +38,10 @@ export default function Observable(props) {
             <div
                 className={`header${open ? ' open' : ''}${!subscriptions().length ? ' unsubscribed' : ''}`}
                 onClick={openObservable}>
-                <span className='fat'>{props.observable}</span>
+                <span className='fat'>{props.identifier}</span>
                 <span className='fat'>{props.type}</span>
-                <span>{props.uuid}</span>
+                <span className='meta'>{`${subscriptionAmount()} subscribers`}</span>
+                <span className='meta'>{`${eventAmount()} events`}</span>
             </div>
 
             <div className={`marble-diagram${open ? ' open' : ''}`}>
