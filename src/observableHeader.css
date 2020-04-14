@@ -1,0 +1,7 @@
+div.ObservableHeader {
+    cursor: pointer;
+}
+
+div.ObservableHeader:hover {
+    background-color: green;
+}
