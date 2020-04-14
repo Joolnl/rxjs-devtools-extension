@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, memo } from 'react';
 import { ObservableContext } from './contexts/observableContext';
 import * as uuid from 'uuid/v4';
 import Pipe from './pipe';
@@ -6,12 +6,13 @@ import './subscription.css';
 import { EventContext } from './contexts/eventContext';
 import MarbleLane from './marbleLane';
 
-export default function Subscription(props) {
+const WrappedSubscription = memo(function Subscription(props) {
     const [open, setOpen] = useState(false);
     const { pipes } = useContext(ObservableContext);
     const { subscribeEvents } = useContext(EventContext);
 
     const openSubscription = () => {
+        // props.setOpen();
         setOpen(!open);
     };
 
@@ -41,4 +42,6 @@ export default function Subscription(props) {
             </div>
         </div>
     );
-};
+});
+
+export default WrappedSubscription;

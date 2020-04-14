@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import './devtoolsPane.css';
-import Observable from './observable';
+import WrappedObservable from './observable';
 import { getMessage$ } from './content';
 import * as uuid from 'uuid/v4';
 import { DispatchContext as ObservableDispatch, ObservableContext } from './contexts/observableContext';
@@ -42,7 +42,7 @@ export default function DevtoolsPane() {
         <div className='DevtoolsPane'>
             {nonJoinObservables()
                 .map(observable => {
-                    return <Observable
+                    return <WrappedObservable
                         key={uuid()}
                         identifier={observable.identifier}
                         observable={observable.uuid}

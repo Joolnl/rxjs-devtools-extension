@@ -45,6 +45,9 @@ const mockMessages = () => {
         dispatchMessage(subscriber, getSubscriptionMock(observableAlfa.message.uuid, [pipeAlfa.message.uuid]));
         dispatchMessage(subscriber, merge);
         dispatchMessage(subscriber, getSubscriptionMock(merge.message.uuid, []));
+        setInterval(() => {
+            dispatchMessage(subscriber, getEventMock('1', observable.message.uuid, pipe.message.uuid, 'initial'));
+        }, 1000);
         // setTimeout(() => {
         //     dispatchMessage(subscriber, { type: 'reset' });
         // }, 5000);

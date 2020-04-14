@@ -3,14 +3,11 @@ import { ObservableContext } from './contexts/observableContext';
 import Pipe from './pipe';
 import * as uuid from 'uuid/v4';
 import './baseObservable.css';
-import { print } from './content';
 
 // Observable component inside merge observables.
 export default function BaseObservable(props) {
     const [open, setOpen] = useState(false);
     const { pipes } = useContext(ObservableContext);
-
-    print(pipes);
 
     const openObservable = () => {
         setOpen(!open);
@@ -29,9 +26,9 @@ export default function BaseObservable(props) {
             <div className={`pipe${open ? ' open' : ''}`}>
                 {getPipes().map(pipe => {
                     return (
-                        <div>
+                        <div key={uuid()}>
                             <span>pipe {pipe.uuid}</span>
-                            <Pipe key={uuid()} pipe={pipe.uuid} />
+                            <Pipe pipe={pipe.uuid} />
                         </div>
                     );
                 })}
